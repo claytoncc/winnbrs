@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html,
+    body {
+      margin: 0;
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      background-color: #005FA9;
+    }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ball {
+      width: 60px;
+      color: white;
+      height: 60px;
+      margin: 6px;
+      border: 4px solid #FFF;
+      display: flex;
+      font-size: 24px;
+      box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.75);
+      line-height: 24px;
+      font-weight: bold;
+      align-items: center;
+      border-radius: 50%;
+      justify-content: center;
+      background-color: #0072B9;
+    }
+
+    .bonus {
+      background-color: #FFD700;
+    }
+
+    @media screen and (max-width: 600px) {
+      .container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="Number_1" class="ball">1</div>
+    <div id="Number_2" class="ball">2</div>
+    <div id="Number_3" class="ball">3</div>
+    <div id="Number_4" class="ball">4</div>
+    <div id="Number_5" class="ball">5</div>
+    <div id="Bonus_1" class="ball bonus">6</div>
+    <div id="Bonus_2" class="ball bonus">7</div>
+  </div>
+  <script>
+    const recr = (array) => {
+      var count = {}
+      var maxCount = 0
+      var mostRecurringNumber = null
+
+      for (var i = 0; i < array.length; i++) {
+        var number = array[i]
+        count[number] = (count[number] || 0) + 1
+
+        if (count[number] > maxCount) {
+          maxCount = count[number]
+          mostRecurringNumber = number
+        }
+      }
+
+      return mostRecurringNumber
+    }
+
+    const call = async () => {
+      var xhr = new XMLHttpRequest()
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var response = xhr.responseText
+          console.log(response)
+
+          const data = response.data.map(row => {
+            const [Number_1, Number_2, Number_3, Number_4, Number_5] = row.numbers
+            const [Bonus_1, Bonus_2] = row.stars
+            return {
+              Number_1,
+              Number_2,
+              Number_3,
+              Number_4,
+              Number_5,
+              Bonus_1,
+              Bonus_2
+            }
+          })
+          // Still need to shift dupes!!!!!!!
+          const Number_1 = findMostRecurringNumber(data.map(o => o.Number_1))
+          const Number_2 = findMostRecurringNumber(data.map(o => o.Number_2))
+          const Number_3 = findMostRecurringNumber(data.map(o => o.Number_3))
+          const Number_4 = findMostRecurringNumber(data.map(o => o.Number_4))
+          const Number_5 = findMostRecurringNumber(data.map(o => o.Number_5))
+          const Bonus_1 = findMostRecurringNumber(data.map(o => o.Bonus_1))
+          const Bonus_2 = findMostRecurringNumber(data.map(o => o.Bonus_2))
+
+          console.log(`Your winning numbers are: ${Number_1} ${Number_2} ${Number_3} ${Number_4} ${Number_5} : ${Bonus_1} ${Bonus_2}`)
+
+          document.getElementById('Number_1').innerText = Number_1
+          document.getElementById('Number_2').innerText = Number_2
+          document.getElementById('Number_3').innerText = Number_3
+          document.getElementById('Number_4').innerText = Number_4
+          document.getElementById('Number_5').innerText = Number_5
+          document.getElementById('Bonus_1').innerText = Bonus_1
+          document.getElementById('Bonus_2').innerText = Bonus_2
+        }
+      }
+
+      xhr.open('GET', 'https://euromillions.api.pedromealha.dev/draws', true)
+      xhr.setRequestHeader('Content-Type', 'application/json')
+      xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+      xhr.send()
+    }
+
+    call()
+  </script>
+</body>
+
+</html>
