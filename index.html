@@ -45,8 +45,7 @@
       }
     }
   </style>
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
-    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -60,7 +59,7 @@
     <div id="Bonus_2" class="ball bonus">7</div>
   </div>
   <script>
-    const recr = (array) => {
+    const findMostRecurringNumber = (array) => {
       var count = {}
       var maxCount = 0
       var mostRecurringNumber = null
@@ -79,7 +78,7 @@
     }
 
     const process = async (response) => {
-      const data = response.data.map(row => {
+      const data = response.map(row => {
         const [Number_1, Number_2, Number_3, Number_4, Number_5] = row.numbers
         const [Bonus_1, Bonus_2] = row.stars
         return {
@@ -118,7 +117,7 @@
         headers: {
           accept: 'application/json'
         },
-        url: 'https://euromillions.api.pedromealha.dev/draws',
+        url: 'https://try.readme.io/https://euromillions.api.pedromealha.dev/draws',
         async: true,
         method: 'GET',
         crossDomain: true
